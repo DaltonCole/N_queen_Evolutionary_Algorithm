@@ -151,7 +151,8 @@ while population[0].valid_queens != n and current_iteration < max_iterations:
 	# Slice population such that max population_size is maintained
 	population = population[:population_size]
 
-# Print information (iteration count, board state, # of valid queens)
+# Print information (iteration count, random seed,
+# 	board state, # of valid queens)
 print("Iteration: 	" + str(current_iteration))
 print("Random Seed:	" + str(random_seed))
 population[0].print_board()

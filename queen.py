@@ -99,7 +99,7 @@ class Queen:
 			for j in range(self.size):
 				print("----", end='')
 				if j == self.size - 1:
-					print()
+					print("-")
 		print()
 
 	def __lt__(self, other):

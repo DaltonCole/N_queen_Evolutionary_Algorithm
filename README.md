@@ -35,3 +35,6 @@ Valid queens: 	8
 
 ## Requirments
 Tested on Python 3.5.2
+
+## Notes
+This is my first EA :)

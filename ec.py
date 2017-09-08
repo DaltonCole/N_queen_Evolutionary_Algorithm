@@ -53,8 +53,16 @@ be given to specify the the random seed
 from queen import Queen
 import sys
 import random
+import signal
 from time import time
 from copy import deepcopy
+
+def signal_handler(signal, frame):
+	"""Handle ctrl+c by printing current best state and exiting
+	"""
+	print('You pressed Ctrl+C!')
+	print_info()
+	sys.exit(0)
 
 def permutation(board_1, board_2, n):
 	"""Create two children from two parents, taking a portion from both
@@ -89,6 +97,16 @@ def mutation(board, n):
 	board.board[point] = random.randrange(n)
 	board.update_valid_queens()
 
+def print_info():
+	"""Print current state
+	Print the last iteration, random seed, board state, and the number of
+	valid queens.
+	"""
+	print("Iteration: 	" + str(current_iteration))
+	print("Random Seed:	" + str(random_seed))
+	population[0].print_board()
+	print("Valid queens: 	" + str(population[0].valid_queens))
+
 # Program requires an argument, the board size
 if len(sys.argv) != 2 and len(sys.argv) != 3:
 	print("Takes one or two argument(s): the board size and random seed.")
@@ -117,6 +135,8 @@ population_size = 10
 probability_of_mutation = 50
 max_iterations = 10000
 #####################
+
+signal.signal(signal.SIGINT, signal_handler)
 
 # Initialize population
 population = []
@@ -153,7 +173,6 @@ while population[0].valid_queens != n and current_iteration < max_iterations:
 
 # Print information (iteration count, random seed,
 # 	board state, # of valid queens)
-print("Iteration: 	" + str(current_iteration))
-print("Random Seed:	" + str(random_seed))
-population[0].print_board()
-print("Valid queens: 	" + str(population[0].valid_queens))
+print_info()
+
+

@@ -2,27 +2,33 @@
 
 This file uses evolutionary algorithms to solve the N Queen Problem
 
+Arguments:
+	(int) board size
+	(int) random seed (optional)
+
 Example:
-	$ python3 ec.py 8
-	Iteration: 	87
+	$ python3 ec.py 8 1504886928
+	Iteration: 	55
+	Random Seed:	1504886928
 	|   |   |   | Q |   |   |   |   |
-	---------------------------------
-	|   |   |   |   |   |   |   | Q |
-	---------------------------------
-	| Q |   |   |   |   |   |   |   |
-	---------------------------------
-	|   |   | Q |   |   |   |   |   |
-	---------------------------------
-	|   |   |   |   |   | Q |   |   |
 	---------------------------------
 	|   | Q |   |   |   |   |   |   |
 	---------------------------------
 	|   |   |   |   |   |   | Q |   |
 	---------------------------------
+	|   |   | Q |   |   |   |   |   |
+	---------------------------------
+	|   |   |   |   |   | Q |   |   |
+	---------------------------------
+	|   |   |   |   |   |   |   | Q |
+	---------------------------------
+	| Q |   |   |   |   |   |   |   |
+	---------------------------------
 	|   |   |   |   | Q |   |   |   |
 	---------------------------------
 
 	Valid queens: 	8
+
 
 
 The following variables can be tweaked to improve the EA:
@@ -39,11 +45,15 @@ The mutation algorithm used is that a random row is selected. Inside this
 row, a queen is placed in a random column, replacing the old queen in that
 row. Every queen in the population has a probability_of_mutation chance
 of being mutated during each iteration.
+
+Random is seeded with time since epoch. A second command line argument can
+be given to specify the the random seed
 """
 
 from queen import Queen
 import sys
 import random
+from time import time
 from copy import deepcopy
 
 def permutation(board_1, board_2, n):
@@ -80,8 +90,8 @@ def mutation(board, n):
 	board.update_valid_queens()
 
 # Program requires an argument, the board size
-if len(sys.argv) != 2:
-	print("Takes one argument: the board size.")
+if len(sys.argv) != 2 and len(sys.argv) != 3:
+	print("Takes one or two argument(s): the board size and random seed.")
 	quit()
 
 # Set board size to first argument
@@ -91,6 +101,16 @@ n = int(sys.argv[1])
 if n < 4:
 	print("Board size must be 4 or greater!")
 	quit()
+
+# Seed the random number generator with either the second argument
+# or with time since epoch
+random_seed = 0
+if len(sys.argv) == 3:
+	random_seed = int(sys.argv[2])
+else:
+	random_seed = int(time())
+
+random.seed(random_seed)
 
 ##### Constants #####
 population_size = 10
@@ -133,5 +153,6 @@ while population[0].valid_queens != n and current_iteration < max_iterations:
 
 # Print information (iteration count, board state, # of valid queens)
 print("Iteration: 	" + str(current_iteration))
+print("Random Seed:	" + str(random_seed))
 population[0].print_board()
 print("Valid queens: 	" + str(population[0].valid_queens))
